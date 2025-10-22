@@ -3,7 +3,7 @@ from typing import TypedDict
 from clients.api_client import APIClient
 
 
-class CreateUserDict(TypedDict):
+class CreateUserDictRequest(TypedDict):
 
     """
     Описание структуры запроса на создание пользователя
