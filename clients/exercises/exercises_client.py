@@ -1,15 +1,52 @@
 from typing import TypedDict
-from unittest.mock import patch
+
 
 from httpx import Response
 
 from clients.api_client import APIClient
+from clients.private_http_builder import AuthenticationUserDict, get_private_http_client
+
+class Exercise(TypedDict):
+    """
+    Описание структуры задания
+    """
+
+    id: str
+    title: str
+    courseId: str
+    maxScore: int
+    minScore: int
+    orderIndex: int
+    description: str
+    estimatedTime: str
+
 
 class GetExercisesQueryDict(TypedDict):
     """
     Описание структуры запрос GET /api/v1/exercises
     """
     course_id: str
+
+
+class GetExercisesResponseDict(TypedDict):
+    """
+    Описание структуры ответа GET /api/v1/exercises
+    """
+
+    exercises: list[Exercise]
+
+class GetExerciseRequestDict(TypedDict):
+    """
+    Описание структуры запроса /api/v1/exercises/{exercise_id}
+    """
+    exercise_id: str
+
+class GetExerciseResponseDict(TypedDict):
+    """
+    Описание структуры ответа /api/v1/exercises/{exercise_id}
+    """
+    exercise: Exercise
+
 
 class CreateExerciseRequestDict(TypedDict):
     """
@@ -23,14 +60,31 @@ class CreateExerciseRequestDict(TypedDict):
     description: str
     estimatedTime: str
 
-class UpdateExerciseRequestDict(TypedDict):
+class CreateExerciseResponseDict(TypedDict):
+    """
+    Описание структуры ответа POST /api/v1/exercises
+    """
 
+    exercise: Exercise
+
+class UpdateExerciseRequestDict(TypedDict):
+    """
+    Описание структуры запроса PATCH /api/v1/exercises
+
+    """
     title: str | None
     maxScore: int | None
     minScore: int | None
     orderIndex: int | None
     description: str | None
     estimatedTime: str | None
+
+class UpdateExerciseResponseDict(TypedDict):
+    """
+    Описание структуры ответа PATCH /api/v1/exercises
+
+    """
+    exercise: Exercise
 
 class ExercisesClient(APIClient):
 
@@ -43,7 +97,7 @@ class ExercisesClient(APIClient):
         """
         return self.get('/api/v1/exercises', params=query)
 
-    def get_exercise_api(self, exercise_id: str) -> Response:
+    def get_exercise_api(self, exercise_id: GetExerciseRequestDict) -> Response:
         """
         Получение информации о задании по exercise_id
 
@@ -80,7 +134,34 @@ class ExercisesClient(APIClient):
         """
         return self.delete(f'/api/v1/exercises/{exercise_id}')
 
+    def get_exercises(self, query: GetExercisesQueryDict) -> GetExercisesResponseDict:
 
+        response = self.get_exercises_api(query).json()
+        return response
+
+    def get_exercise(self, exercise_id: GetExerciseRequestDict) -> GetExerciseResponseDict:
+
+        response = self.get_exercise_api(exercise_id).json()
+        return response
+
+    def create_exercise(self, request: CreateExerciseRequestDict) -> CreateExerciseResponseDict:
+
+        response = self.create_exercise_api(request).json()
+        return response
+
+    def update_exercise(self, request: UpdateExerciseRequestDict, exercise_id: GetExerciseRequestDict ) -> UpdateExerciseResponseDict:
+
+        response = self.update_exercise_api(request, exercise_id).json()
+        return response
+
+
+def exercises_client(user: AuthenticationUserDict) -> ExercisesClient:
+    """
+    Функция создает экземпляр ExercisesClient c уже настроенным HTTP клиентом
+
+    :return: Готовый к использованию ExercisesClient
+    """
+    return ExercisesClient(client = get_private_http_client(user))
 
 
 
