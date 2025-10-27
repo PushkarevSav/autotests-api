@@ -16,6 +16,7 @@ create_user_request = CreateUserRequestSchema(
     middle_name="string"  # Передаем аргументы в формате snake_case вместо camelCase
 )
 create_user_response = public_users_client.create_user(create_user_request)
+
 print('Create user data:', create_user_response)
 
 # Используем атрибуты вместо ключей
