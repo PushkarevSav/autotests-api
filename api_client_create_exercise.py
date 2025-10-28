@@ -39,7 +39,7 @@ print('Create course data:', create_course_response)
 exercises_client = exercises_client(authentication_user)
 
 #Создаем занятие
-create_exercises_request = CreateExerciseRequestSchema()
+create_exercises_request = CreateExerciseRequestSchema(course_id=create_course_response.course.id)
 
 create_course_response = exercises_client.create_exercise(create_exercises_request)
 print('Create exercise data:', create_course_response)
