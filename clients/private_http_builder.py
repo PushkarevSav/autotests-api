@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import TypedDict
 
 from httpx import Client
@@ -12,6 +13,7 @@ class AuthenticationUserSchema(BaseModel):  # Структура данных п
 
 
 # Создаем private builder
+@lru_cache(maxsize=None)  # Кешируем возвращаемое значение
 def get_private_http_client(user: AuthenticationUserSchema) -> Client:
     """
     Функция создаёт экземпляр httpx.Client с аутентификацией пользователя.
