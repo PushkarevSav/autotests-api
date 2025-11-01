@@ -1,13 +1,14 @@
 from functools import lru_cache
-from typing import TypedDict
 
 from httpx import Client
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from clients.authentication.authentication_client import get_authentication_client, LoginRequestSchema
 
 
-class AuthenticationUserSchema(BaseModel):  # Структура данных пользователя для авторизации
+class AuthenticationUserSchema(BaseModel):
+
+    model_config = ConfigDict(frozen=True)
     email: str
     password: str
 

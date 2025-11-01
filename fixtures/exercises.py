@@ -19,11 +19,11 @@ def exercise_client(function_user: UserFixture) -> ExercisesClient:
     return exercises_client(function_user.authentication_user)
 
 
-@pytest.fixture()
-def function_exercise(exercise_client: ExercisesClient,
-                      function_user: UserFixture,
-                      function_file: FileFixture,
-                      function_course: CourseFixture) -> ExerciseFixture:
-    request = CreateExerciseRequestSchema(course_id=function_course.course.id)
-    response = exercise_client.create_exercise(request)
-    return ExerciseFixture(request = request, response = response)
+@pytest.fixture
+def function_exercise(
+        exercises_client: ExercisesClient,
+        function_course: CourseFixture
+) -> ExerciseFixture:
+    request = CreateExerciseRequestSchema(course_id=function_course.response.course.id)
+    response = exercises_client.create_exercise(request)
+    return ExerciseFixture(request=request, response=response)
