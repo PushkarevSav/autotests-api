@@ -7,7 +7,7 @@ from clients.users.users_schema import UserSchema
 from tools.fakers import fake
 
 
-class Course(BaseModel):
+class CourseSchema(BaseModel):
     """
     Описание структуры курса.
     """
@@ -27,6 +27,9 @@ class GetCoursesQuerySchema(BaseModel):
     """
     Описание структуры запроса на получение списка курсов.
     """
+
+    model_config = ConfigDict(populate_by_name=True)
+
     user_id: str = Field(alias='userId')
 
 
@@ -57,13 +60,15 @@ class CreateCourseResponseSchema(BaseModel):
     """
     Описание структуры ответа создания курса.
     """
-    course: Course
+    course: CourseSchema
 
 
 class UpdateCourseRequestSchema(BaseModel):
     """
     Описание структуры запроса на обновление курса.
     """
+
+
     # Добавили генерацию случайного заголовка
     title: str | None = Field(default_factory=fake.sentence)
     # Добавили генерацию случайного максимального балла
@@ -74,3 +79,19 @@ class UpdateCourseRequestSchema(BaseModel):
     description: str | None = Field(default_factory=fake.text)
     # Добавили генерацию случайного предполагаемого времени прохождения курса
     estimated_time: str | None = Field(alias="estimatedTime", default_factory=fake.estimated_time)
+
+
+# Остальной код без изменений
+
+class UpdateCourseResponseSchema(BaseModel):
+    """
+    Описание структуры ответа обновления курса.
+    """
+    course: CourseSchema
+
+
+class GetCoursesResponseSchema(BaseModel):
+    """
+    Описание структуры ответа на получение списка курсов.
+    """
+    courses: list[CourseSchema]
