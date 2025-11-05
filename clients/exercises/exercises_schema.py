@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from tools.fakers import fake
 
 
-class Exercise(BaseModel):
+class ExerciseSchema(BaseModel):
     """
     Описание структуры задания
     """
@@ -24,6 +24,8 @@ class GetExercisesQuerySchema(BaseModel):
     """
     Описание структуры запрос GET /api/v1/exercises
     """
+
+    model_config = ConfigDict(populate_by_name=True)
     course_id: str = Field(alias='courseId')
 
 
@@ -32,14 +34,14 @@ class GetExercisesResponseSchema(BaseModel):
     Описание структуры ответа GET /api/v1/exercises
     """
 
-    exercises: list[Exercise]
+    exercises: list[ExerciseSchema]
 
 
 class GetExerciseResponseSchema(BaseModel):
     """
     Описание структуры ответа /api/v1/exercises/{exercise_id}
     """
-    exercise: Exercise
+    exercise: ExerciseSchema
 
 
 class CreateExerciseRequestSchema(BaseModel):
@@ -62,7 +64,7 @@ class CreateExerciseResponseSchema(BaseModel):
     Описание структуры ответа POST /api/v1/exercises
     """
 
-    exercise: Exercise
+    exercise: ExerciseSchema
 
 class UpdateExerciseRequestSchema(BaseModel):
     """
@@ -81,4 +83,4 @@ class UpdateExerciseResponseSchema(BaseModel):
     Описание структуры ответа PATCH /api/v1/exercises
 
     """
-    exercise: Exercise
+    exercise: ExerciseSchema
