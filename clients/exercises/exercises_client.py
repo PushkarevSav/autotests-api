@@ -45,7 +45,7 @@ class ExercisesClient(APIClient):
         :param exercise_id: Номер задания
         :return: Ответ от сервера в виде объекта httpx.Response
         """
-        return self.patch(f'/api/v1/exercises/{exercise_id}', json=request.modal_dump(by_alias =True))
+        return self.patch(f'/api/v1/exercises/{exercise_id}', json=request.model_dump(by_alias =True))
 
     def delete_exercise_api(self, exercise_id: str) -> Response:
         """

@@ -1,5 +1,6 @@
-from clients.exercises.exercises_schema import CreateExerciseRequestSchema, CreateExerciseResponseSchema,  \
-    ExerciseSchema, GetExerciseResponseSchema, GetExercisesResponseSchema
+from clients.exercises.exercises_schema import CreateExerciseRequestSchema, CreateExerciseResponseSchema, \
+    ExerciseSchema, GetExerciseResponseSchema, GetExercisesResponseSchema, UpdateExerciseResponseSchema, \
+    UpdateExerciseRequestSchema
 from tools.assertions.base import assert_status_code, assert_equal, assert_length
 
 
@@ -46,3 +47,25 @@ def assert_get_exercise_response(actual: GetExerciseResponseSchema, expected: Cr
     """
 
     assert_exercise(actual.exercise, expected.exercise)
+
+
+def assert_update_exercise_response(actual: UpdateExerciseRequestSchema, expected: UpdateExerciseResponseSchema):
+    """
+    Проверяем обновление курса
+    :param actual: Запрос к API
+    :param expected: Ответ к API
+    :return: возвращаем AssertionError в случае несовпадение полей
+    """
+
+    if actual.title is not None:
+        assert_equal(actual.title, expected.exercise.title, 'title')
+    if actual.max_score is not None:
+        assert_equal(actual.max_score, expected.exercise.max_score, 'max_score')
+    if actual.min_score is not None:
+        assert_equal(actual.min_score, expected.exercise.min_score, 'min_score')
+    if actual.order_index is not None:
+        assert_equal(actual.order_index, expected.exercise.order_index, 'order_index')
+    if actual.description is not None:
+        assert_equal(actual.description, expected.exercise.description, 'description')
+    if actual.estimated_time is not None:
+        assert_equal(actual.estimated_time, expected.exercise.estimated_time, 'estimated_time')
